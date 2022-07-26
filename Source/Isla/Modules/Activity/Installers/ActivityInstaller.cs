@@ -1,9 +1,9 @@
-using Isla.Activity.Services;
 using Isla.Bootstrap.Extensions;
+using Isla.Modules.Activity.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace Isla.Activity.Installers;
+namespace Isla.Modules.Activity.Installers;
 
 /// <summary>
 /// An extension method to add the activity module to the service collection.

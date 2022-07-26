@@ -2,7 +2,7 @@ using Discord.WebSocket;
 using Isla.Bootstrap.Interfaces;
 using Microsoft.Extensions.Logging;
 
-namespace Isla.Activity.Services;
+namespace Isla.Modules.Activity.Services;
 
 /// <summary>
 /// A service which periodically updates the bots activity.

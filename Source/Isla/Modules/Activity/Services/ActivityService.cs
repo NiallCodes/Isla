@@ -1,7 +1,7 @@
 using Discord;
-using Isla.Activity.Constants;
+using Isla.Modules.Activity.Constants;
 
-namespace Isla.Activity.Services;
+namespace Isla.Modules.Activity.Services;
 
 /// <summary>
 /// A service which selects an activity based on the internal state.

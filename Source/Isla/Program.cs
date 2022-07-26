@@ -1,8 +1,9 @@
 ﻿using Discord;
-using Isla.Activity.Installers;
 using Isla.Bootstrap.Extensions;
 using Isla.Client.Config;
 using Isla.Client.Installers;
+using Isla.Database.Installers;
+using Isla.Modules.Activity.Installers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NiallVR.Launcher.Configuration.Validation.Extensions;
@@ -13,11 +14,14 @@ await Host.CreateDefaultBuilder()
     .AddConfigValidation()
     .ConfigureServices(services =>
     {
-        // Modules
+        // App Modules
         services.AddClientModule();
+        services.AddDatabaseModule();
+
+        // Bot Modules
         services.AddActivityModule();
 
-        // Discord Configuration
+        // Discord Client Configuration
         services.AddDiscord((s, settings) =>
         {
             settings.Token = s.GetRequiredService<DiscordClientConfig>().Token!;

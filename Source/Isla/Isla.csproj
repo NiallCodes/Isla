@@ -20,4 +20,13 @@
       </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Database" />
+      <Folder Include="Modules" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.5" />
+    </ItemGroup>
+
 </Project>
