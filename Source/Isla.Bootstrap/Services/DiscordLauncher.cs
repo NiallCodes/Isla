@@ -4,7 +4,6 @@ using Isla.Bootstrap.Interfaces;
 using Isla.Bootstrap.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace Isla.Bootstrap.Services;
 
@@ -25,7 +24,7 @@ internal class DiscordLauncher : IHostedService
         _services.GetServices<IDiscordListener>(); // Pull them so they instantiate before Discord startup
         var settings = _services.GetRequiredService<DiscordSettings>();
         var discord = _services.GetRequiredService<DiscordSocketClient>();
-        
+
         await discord.LoginAsync(TokenType.Bot, settings.Token);
         await discord.StartAsync();
     }

@@ -47,11 +47,11 @@ public static class SetupExtensions
     }
 
     /// <summary>
-    /// Registers a <see cref="IDiscordListener"/> as its implementation type and the interface. 
+    /// Registers a <see cref="IDiscordListener"/> as its implementation type and the <see cref="IDiscordListener"/> interface. 
     /// </summary>
     /// <param name="services">The service collection to register to.</param>
     /// <typeparam name="T">The service type to register.</typeparam>
-    public static void AddListenerAsSelf<T>(this IServiceCollection services) where T : class, IDiscordListener
+    public static void AddDiscordListener<T>(this IServiceCollection services) where T : class, IDiscordListener
     {
         services.AddSingleton<T>();
         services.AddSingleton<IDiscordListener>(s => s.GetRequiredService<T>());
