@@ -1,0 +1,17 @@
+# C# - Build
+[Bb]in/
+[Oo]bj/
+
+# C# - Config
+appsettings.*.Json
+
+# C# - User Files
+*.user
+
+# Editors
+.vs
+.idea
+
+# macOS
+*.DS_Store
+
