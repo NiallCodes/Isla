@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using NiallVR.Launcher.Configuration.Validation.Abstract;
 
-namespace Isla.Client.Config;
+namespace Isla.Discord.Config;
 
 public class DiscordClientConfig : ValidatedConfig
 {

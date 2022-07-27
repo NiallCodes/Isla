@@ -1,8 +1,8 @@
-using Isla.Client.Config;
+using Isla.Discord.Config;
 using Microsoft.Extensions.DependencyInjection;
 using NiallVR.Launcher.Configuration.Binding.Extensions;
 
-namespace Isla.Client.Installers;
+namespace Isla.Discord.Installers;
 
 public static class ClientInstaller
 {

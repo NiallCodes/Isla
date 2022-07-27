@@ -4,11 +4,9 @@ using Discord.WebSocket;
 using Isla.Bootstrap.Interfaces;
 using Isla.Database.Entities;
 using Isla.Modules.Roles.Config;
-using Isla.Modules.Roles.Enums;
 using Isla.Modules.Roles.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using EntityFrameworkQueryableExtensions = Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions;
 
 namespace Isla.Modules.Roles.Events;
 
@@ -18,7 +16,8 @@ public class RoleReadyListener : IDiscordListener
     private readonly DiscordSocketClient _discord;
     private readonly ILogger<RoleReadyListener> _logger;
     private readonly IDbContextFactory<DatabaseContext> _dbFactory;
-
+    private const int MessagesNeeded = 2;
+    
     public RoleReadyListener(
         RoleConfig roleConfig, DiscordSocketClient discord,
         ILogger<RoleReadyListener> logger, IDbContextFactory<DatabaseContext> dbFactory
@@ -38,80 +37,149 @@ public class RoleReadyListener : IDiscordListener
         return Task.CompletedTask;
     }
 
-    /// <summary>
-    /// Updates the role messages based on the provided config.
-    /// </summary>
     private async Task UpdateRoleMessages()
     {
-        _logger.LogInformation("Updating role buttons");
-        await using var db = await _dbFactory.CreateDbContextAsync();
-        foreach (var (roleType, category) in _roleConfig.Categories!)
-        {
-            try
-            {
-                await UpdateRoleMessage(db, roleType, category);
-            }
-            catch (Exception error)
-            {
-                _logger.LogError(error, "An unknown error occured when setting up the {RoleType} category", roleType);
-            }
-        }
-
-        await db.SaveChangesAsync();
-        _logger.LogInformation("Role buttons updated");
-    }
-
-    /// <summary>
-    /// Updates a single role message based on the provided config.
-    /// </summary>
-    private async Task UpdateRoleMessage(DatabaseContext db, RoleType roleType, RoleCategory category)
-    {
-        // Get the database entry for the RoleType.
-        var roleMessage = await EntityFrameworkQueryableExtensions.FirstOrDefaultAsync(db.RoleMessages, r => r.Type == roleType);
-        if (roleMessage is null)
-        {
-            roleMessage = new RoleMessage { Type = roleType };
-            db.Add(roleMessage);
-        }
-
-        // Get the message if it exists, otherwise create a new message.
         var channel = _discord.Guilds.First().GetTextChannel(_roleConfig.ChannelId);
         if (channel is null)
         {
-            _logger.LogWarning("Not updating {RoleType} category because channel {ChannelId} doesn't exist", roleType, _roleConfig.ChannelId);
+            _logger.LogError("Not updating role buttons as the text channel doesn't exist");
             return;
         }
-
-        // Get or create the message to update.
-        var message = roleMessage.MessageId is 0 ? null : await channel.GetMessageAsync(roleMessage.MessageId);
-        if (message is null)
+        
+        try
         {
-            _logger.LogInformation("Creating a new message for the {RoleType} category as one doesn't exist", roleType);
-            message = await channel.SendMessageAsync("Loading");
-            roleMessage.MessageId = message.Id;
+            await RemoveStaleMessages(channel);
+            await RemoveUnneededMessages(channel);
+            await CreateNewMessages(channel);
+            await ClearRoleMessageContent(channel);
+            await UpdateRoleMessages(channel);
+        }
+        catch (Exception error)
+        {
+            _logger.LogError(error, "Failed to update the role messages");
         }
 
+    }
+
+    /// <summary>
+    /// Removes database entries where the message no longer exists.
+    /// </summary>
+    private async Task RemoveStaleMessages(IMessageChannel channel)
+    {
+        _logger.LogDebug("Removing stale messages from the Database");
+        await using var db = await _dbFactory.CreateDbContextAsync();
+        await foreach (var roleMessage in db.RoleMessages.ToAsyncEnumerable())
+        {
+            var message = await channel.GetMessageAsync(roleMessage.MessageId);
+            if (message is null)
+                db.RoleMessages.Remove(roleMessage);
+        }
+        await db.SaveChangesAsync();
+    }
+
+    /// <summary>
+    /// Removes messages that aren't needed anymore.
+    /// </summary>
+    private async Task RemoveUnneededMessages(IMessageChannel channel)
+    {
+        _logger.LogDebug("Removing unneeded messages");
+        await using var db = await _dbFactory.CreateDbContextAsync();
+        var messageCount = await db.RoleMessages.CountAsync();
+        await foreach (var roleMessage in db.RoleMessages.Take(messageCount).AsAsyncEnumerable())
+        {
+            await channel.DeleteMessageAsync(roleMessage.MessageId);
+            db.RoleMessages.Remove(roleMessage);
+        }
+        await db.SaveChangesAsync();
+    }
+
+    /// <summary>
+    /// Creates messages until the needed amount exists.
+    /// </summary>
+    private async Task CreateNewMessages(IMessageChannel channel)
+    {
+        _logger.LogDebug("Creating new messages");
+        await using var db = await _dbFactory.CreateDbContextAsync();
+        var amountToCreate = MessagesNeeded - await db.RoleMessages.CountAsync();
+        for (var i = 0; i < Math.Max(0, amountToCreate); i++)
+        {
+            var message = await channel.SendMessageAsync("Loading...");
+            db.Add(new RoleMessage { MessageId = message.Id, Created = message.Timestamp.ToUnixTimeSeconds()});
+        }
+        await db.SaveChangesAsync();
+    }
+
+    /// <summary>
+    /// Changes the content of all the role messages to a loading state.
+    /// </summary>
+    private async Task ClearRoleMessageContent(IMessageChannel channel)
+    {
+        _logger.LogDebug("Clearing role message content");
+        await using var db = await _dbFactory.CreateDbContextAsync();
+        await foreach (var roleMessage in db.RoleMessages.ToAsyncEnumerable())
+            await channel.ModifyMessageAsync(roleMessage.MessageId, msg => { msg.Content = "Loading..."; });
+    }
+
+    /// <summary>
+    /// Updates the role messages with their new content.
+    /// </summary>
+    private async Task UpdateRoleMessages(IMessageChannel channel)
+    {
+        await using var db = await _dbFactory.CreateDbContextAsync();
+        var messages = await db.RoleMessages.OrderBy(m => m.Created).ToListAsync();
+        await UpdateAccessMessage(channel, messages.ElementAt(0));
+        await UpdateColourMessage(channel, messages.ElementAt(1));
+    }
+
+    /// <summary>
+    /// Updates the message which handles the access roles. 
+    /// </summary>
+    private async Task UpdateAccessMessage(IMessageChannel channel, RoleMessage roleMessage)
+    {
         // Build the message content
         var contentBuilder = new StringBuilder();
-        contentBuilder.Append("__**").Append(category.Title).Append("**__\n");
-        contentBuilder.Append(category.Description).Append("\n\n");
-        foreach (var roleEntry in category.Roles!.Where(r => !string.IsNullOrWhiteSpace(r.Description)))
+        contentBuilder.Append("__**Access Roles**__\n");
+        contentBuilder.Append("Roles which provide access to the various channels!").Append("\n\n");
+        foreach (var roleEntry in _roleConfig.Access!)
         {
             var roleName = $"{roleEntry.Emoji} {roleEntry.Title}".Trim();
             contentBuilder.Append("**").Append(roleName).Append("**\n");
             contentBuilder.Append(roleEntry.Description).Append("\n\n");
         }
-
+        
         // Build the buttons
         var componentBuilder = new ComponentBuilder();
-        foreach (var roleEntry in category.Roles!)
+        foreach (var roleEntry in _roleConfig.Access!)
         {
             var emoji = roleEntry.Emoji is null ? null : new Emoji(roleEntry.Emoji);
-            componentBuilder.WithButton(roleEntry.Title, $"role-{roleEntry.RoleId}", emote: emoji);
+            componentBuilder.WithButton(roleEntry.Title, roleEntry.RoleId.ToString(), emote: emoji);
         }
 
         // Update the content of the message
-        await channel.ModifyMessageAsync(message.Id, msg =>
+        await channel.ModifyMessageAsync(roleMessage.MessageId, msg =>
+        {
+            msg.Content = contentBuilder.ToString();
+            msg.Components = componentBuilder.Build();
+        });
+    }
+    
+    /// <summary>
+    /// Updates the message which handles the colour roles. 
+    /// </summary>
+    private async Task UpdateColourMessage(IMessageChannel channel, RoleMessage roleMessage)
+    {
+        // Build the message content
+        var contentBuilder = new StringBuilder();
+        contentBuilder.Append("__**Colour Modifiers**__\n");
+        contentBuilder.Append("A splash of paint for your nametag!");
+
+        // Build the buttons
+        var componentBuilder = new ComponentBuilder();
+        foreach (var roleEntry in _roleConfig.Colour!)
+            componentBuilder.WithButton(roleEntry.Title, roleEntry.RoleId.ToString());
+
+        // Update the content of the message
+        await channel.ModifyMessageAsync(roleMessage.MessageId, msg =>
         {
             msg.Content = contentBuilder.ToString();
             msg.Components = componentBuilder.Build();

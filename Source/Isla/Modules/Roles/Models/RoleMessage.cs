@@ -1,13 +1,10 @@
 using System.ComponentModel.DataAnnotations;
-using Isla.Modules.Roles.Enums;
-using Microsoft.EntityFrameworkCore;
 
 namespace Isla.Modules.Roles.Models;
 
 /// <summary>
-/// Persisted information about a role message.
+/// The persistant id of a message holding role information.
 /// </summary>
-[Index(nameof(Type), IsUnique = true)]
 public class RoleMessage
 {
     /// <summary>
@@ -17,12 +14,12 @@ public class RoleMessage
     public int Id { get; set; }
 
     /// <summary>
-    /// The type of role the message is for.
+    /// The UTC timestamp of when the message was created.
     /// </summary>
-    public RoleType Type { get; set; }
-
+    public long Created { get; set; }
+    
     /// <summary>
-    /// The Discord ID of the message in the role channel.
+    /// The Discord ID of the message.
     /// </summary>
     public ulong MessageId { get; set; }
 }

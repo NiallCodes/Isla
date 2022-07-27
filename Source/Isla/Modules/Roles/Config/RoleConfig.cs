@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using Isla.Modules.Roles.Enums;
 using NiallVR.Launcher.Configuration.Validation.Abstract;
 using NiallVR.Launcher.Configuration.Validation.Interfaces;
 
@@ -14,10 +13,16 @@ public class RoleConfig : IValidatedConfig
     public ulong ChannelId { get; set; }
 
     /// <summary>
-    /// The various role messages.
+    /// The collection of channel access roles.
     /// </summary>
     [Required]
-    public IDictionary<RoleType, RoleCategory>? Categories { get; set; }
+    public List<RoleEntry>? Access { get; set; }
+
+    /// <summary>
+    /// The collection of colour roles.
+    /// </summary>
+    [Required]
+    public List<RoleEntry>? Colour { get; set; }
 
     /// <summary>
     /// Validates the role config and the nested categories.
@@ -25,39 +30,10 @@ public class RoleConfig : IValidatedConfig
     public void ValidateConfig()
     {
         Validator.ValidateObject(this, new ValidationContext(this), true);
-        foreach (var roleCategory in Categories!.Values)
-            roleCategory.ValidateConfig();
-    }
-}
-
-public class RoleCategory : IValidatedConfig
-{
-    /// <summary>
-    /// The title of the role category message.
-    /// </summary>
-    [Required]
-    public string? Title { get; set; }
-
-    /// <summary>
-    /// The description located under the title.
-    /// </summary>
-    [Required]
-    public string? Description { get; set; }
-
-    /// <summary>
-    /// The list of role buttons.
-    /// </summary>
-    [Required]
-    public IReadOnlyCollection<RoleEntry>? Roles { get; set; }
-
-    /// <summary>
-    /// Validates the category and the nested roles.
-    /// </summary>
-    public void ValidateConfig()
-    {
-        Validator.ValidateObject(this, new ValidationContext(this), true);
-        foreach (var roleEntry in Roles!)
-            roleEntry.ValidateConfig();
+        foreach (var accessRoles in Access!)
+            accessRoles.ValidateConfig();
+        foreach (var colourRoles in Colour!)
+            colourRoles.ValidateConfig();
     }
 }
 

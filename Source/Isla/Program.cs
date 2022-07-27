@@ -1,8 +1,8 @@
 ﻿using Discord;
 using Isla.Bootstrap.Extensions;
-using Isla.Client.Config;
-using Isla.Client.Installers;
 using Isla.Database.Installers;
+using Isla.Discord.Config;
+using Isla.Discord.Installers;
 using Isla.Modules.Activity.Installers;
 using Isla.Modules.Roles.Installers;
 using Microsoft.Extensions.DependencyInjection;

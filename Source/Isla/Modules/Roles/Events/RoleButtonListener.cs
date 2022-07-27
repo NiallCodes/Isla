@@ -10,7 +10,7 @@ public class RoleButtonListener : IDiscordListener
     private readonly RoleConfig _roleConfig;
     private readonly DiscordSocketClient _discord;
     private readonly ILogger<RoleButtonListener> _logger;
-    private readonly IReadOnlyDictionary<ulong, string> _roleNameLookup;
+    private readonly Dictionary<ulong, string> _roleNameLookup = new();
 
     public RoleButtonListener(RoleConfig roleConfig, DiscordSocketClient discord, ILogger<RoleButtonListener> logger)
     {
@@ -18,7 +18,12 @@ public class RoleButtonListener : IDiscordListener
         _discord = discord;
         _roleConfig = roleConfig;
         _discord.ButtonExecuted += HandleButtonPressed;
-        _roleNameLookup = roleConfig.Categories!.Values.SelectMany(s => s.Roles!).ToDictionary(e => e.RoleId, e => $"{e.Emoji} {e.Title}".Trim());
+        
+        // Fill the lookup
+        foreach (var accessRole in roleConfig.Access!)
+            _roleNameLookup[accessRole.RoleId] = $"{accessRole.Emoji} {accessRole.Title}".Trim();
+        foreach (var colourRole in roleConfig.Colour!)
+            _roleNameLookup[colourRole.RoleId] = $"{colourRole.Emoji} {colourRole.Title}".Trim();
     }
 
     /// <summary>
@@ -32,10 +37,10 @@ public class RoleButtonListener : IDiscordListener
             return;
 
         // Convert the role id from string.
-        var validRoleId = ulong.TryParse(arg.Data.CustomId[5..], out var roleId);
+        var validRoleId = ulong.TryParse(arg.Data.CustomId, out var roleId);
         if (!validRoleId)
         {
-            _logger.LogWarning("Used selected role {RoleId} but it's not a valid ulong", arg.Data.CustomId[5..]);
+            _logger.LogWarning("Used selected role {RoleId} but it's not a valid ulong", arg.Data.CustomId);
             return;
         }
 
