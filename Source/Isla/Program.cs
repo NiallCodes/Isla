@@ -4,6 +4,7 @@ using Isla.Client.Config;
 using Isla.Client.Installers;
 using Isla.Database.Installers;
 using Isla.Modules.Activity.Installers;
+using Isla.Modules.Roles.Installers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NiallVR.Launcher.Configuration.Validation.Extensions;
@@ -20,12 +21,13 @@ await Host.CreateDefaultBuilder()
 
         // Bot Modules
         services.AddActivityModule();
+        services.AddRoleModule();
 
         // Discord Client Configuration
         services.AddDiscord((s, settings) =>
         {
             settings.Token = s.GetRequiredService<DiscordClientConfig>().Token!;
-            settings.DiscordConfig.GatewayIntents = GatewayIntents.None;
+            settings.DiscordConfig.GatewayIntents = GatewayIntents.Guilds;
         });
     })
     .RunConsoleAsync();

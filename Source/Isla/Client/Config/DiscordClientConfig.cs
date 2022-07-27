@@ -3,9 +3,6 @@ using NiallVR.Launcher.Configuration.Validation.Abstract;
 
 namespace Isla.Client.Config;
 
-/// <summary>
-/// The configuration model for the client module.
-/// </summary>
 public class DiscordClientConfig : ValidatedConfig
 {
     /// <summary>

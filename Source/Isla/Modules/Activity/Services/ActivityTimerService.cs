@@ -1,35 +1,40 @@
 using Discord.WebSocket;
-using Isla.Bootstrap.Interfaces;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace Isla.Modules.Activity.Services;
 
-/// <summary>
-/// A service which periodically updates the bots activity.
-/// </summary>
-public class ActivityTimerService : IDisposable, IDiscordListener
+public class ActivityTimerService : IHostedService
 {
     private readonly DiscordSocketClient _discordClient;
-    private readonly ActivityService _activityService;
+    private readonly ActivityGeneratorService _activityGeneratorService;
     private readonly ILogger<ActivityTimerService> _logger;
     private readonly PeriodicTimer _periodicTimer = new(TimeSpan.FromMinutes(20));
 
-    public ActivityTimerService(DiscordSocketClient discord, ActivityService activityService, ILogger<ActivityTimerService> logger)
+    public ActivityTimerService(DiscordSocketClient discord, ActivityGeneratorService activityGeneratorService, ILogger<ActivityTimerService> logger)
     {
         _logger = logger;
         _discordClient = discord;
-        _activityService = activityService;
-        
-        _logger.LogInformation("Starting the Activity service");
-        _ = StartTimerLoopAsync();
+        _activityGeneratorService = activityGeneratorService;
     }
 
-    public void Dispose()
+    public Task StartAsync(CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Stopping the Activity service");
-        _periodicTimer.Dispose();
+        _logger.LogInformation("Starting the activity timer service");
+        _ = StartTimerLoopAsync();
+        return Task.CompletedTask;
     }
 
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("Stopping the activity timer service");
+        _periodicTimer.Dispose();
+        return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// Periodically updates the bots displayed activity.
+    /// </summary>
     private async Task StartTimerLoopAsync()
     {
         do
@@ -37,7 +42,7 @@ public class ActivityTimerService : IDisposable, IDiscordListener
             try
             {
                 _logger.LogDebug("Updating the activity");
-                await _discordClient.SetActivityAsync(_activityService.GetNextActivity());
+                await _discordClient.SetActivityAsync(_activityGeneratorService.GetNextActivity());
             }
             catch (Exception error)
             {

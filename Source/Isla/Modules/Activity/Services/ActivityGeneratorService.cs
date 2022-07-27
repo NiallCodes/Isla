@@ -3,14 +3,11 @@ using Isla.Modules.Activity.Constants;
 
 namespace Isla.Modules.Activity.Services;
 
-/// <summary>
-/// A service which selects an activity based on the internal state.
-/// </summary>
-public class ActivityService
+public class ActivityGeneratorService
 {
     private readonly Random _random;
 
-    public ActivityService(Random random)
+    public ActivityGeneratorService(Random random)
     {
         _random = random;
     }

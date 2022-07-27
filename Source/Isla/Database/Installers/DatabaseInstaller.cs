@@ -8,19 +8,16 @@ using Npgsql;
 
 namespace Isla.Database.Installers;
 
-/// <summary>
-/// An extension method to add the data module to the service collection.
-/// </summary>
 public static class DatabaseInstaller
 {
     /// <summary>
-    /// Adds the services used by the database module.
+    /// Adds the types used by the database module to the service collection.
     /// </summary>
     public static void AddDatabaseModule(this IServiceCollection services)
     {
         // Config
         services.BindConfig<DatabaseConfig>("Database");
-        
+
         // Services
         services.AddHostedService<DatabaseMigrationService>();
         services.AddDbContextFactory<DatabaseContext>((s, builder) =>

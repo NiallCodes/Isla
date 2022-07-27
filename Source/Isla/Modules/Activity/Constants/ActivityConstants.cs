@@ -2,9 +2,6 @@ using Discord;
 
 namespace Isla.Modules.Activity.Constants;
 
-/// <summary>
-/// Constants for the activity module.
-/// </summary>
 public static class ActivityConstants
 {
     /// <summary>
