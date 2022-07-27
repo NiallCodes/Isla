@@ -43,6 +43,7 @@ internal class DiscordLogger : HostedServiceBase
             // WebSocketExceptions are handled, but also logged, by Discord.Net.
             // We don't really care about them, as it's not our problem.
             case WebSocketException:
+            case Exception { InnerException: WebSocketException }:
                 return Task.CompletedTask;
 
             default:
