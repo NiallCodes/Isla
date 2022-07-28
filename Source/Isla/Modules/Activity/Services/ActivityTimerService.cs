@@ -41,7 +41,6 @@ public class ActivityTimerService : IHostedService
         {
             try
             {
-                _logger.LogDebug("Updating the activity");
                 await _discordClient.SetActivityAsync(_activityGeneratorService.GetNextActivity());
             }
             catch (Exception error)

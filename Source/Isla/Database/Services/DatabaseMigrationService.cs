@@ -22,14 +22,14 @@ public class DatabaseMigrationService : HostedServiceBase
 
     public override async Task StartAsync(CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Starting database migration");
-
         while (true)
         {
             try
             {
+                _logger.LogInformation("Starting database migration");
                 await using var db = await _dbFactory.CreateDbContextAsync(cancellationToken);
                 await db.Database.MigrateAsync(cancellationToken);
+                _logger.LogInformation("Database migration complete");
                 break;
             }
             catch (NpgsqlException error)
@@ -38,7 +38,5 @@ public class DatabaseMigrationService : HostedServiceBase
                 await Task.Delay(TimeSpan.FromSeconds(10), cancellationToken);
             }
         }
-
-        _logger.LogInformation("Database migration complete");
     }
 }
