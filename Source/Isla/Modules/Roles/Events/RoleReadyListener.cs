@@ -17,7 +17,7 @@ public class RoleReadyListener : IDiscordListener
     private readonly ILogger<RoleReadyListener> _logger;
     private readonly IDbContextFactory<DatabaseContext> _dbFactory;
     private const int MessagesNeeded = 2;
-    
+
     public RoleReadyListener(
         RoleConfig roleConfig, DiscordSocketClient discord,
         ILogger<RoleReadyListener> logger, IDbContextFactory<DatabaseContext> dbFactory
@@ -45,20 +45,18 @@ public class RoleReadyListener : IDiscordListener
             _logger.LogError("Not updating role buttons as the text channel doesn't exist");
             return;
         }
-        
+
         try
         {
             await RemoveStaleMessages(channel);
             await RemoveUnneededMessages(channel);
             await CreateNewMessages(channel);
-            await ClearRoleMessageContent(channel);
             await UpdateRoleMessages(channel);
         }
         catch (Exception error)
         {
             _logger.LogError(error, "Failed to update the role messages");
         }
-
     }
 
     /// <summary>
@@ -74,6 +72,7 @@ public class RoleReadyListener : IDiscordListener
             if (message is null)
                 db.RoleMessages.Remove(roleMessage);
         }
+
         await db.SaveChangesAsync();
     }
 
@@ -85,11 +84,16 @@ public class RoleReadyListener : IDiscordListener
         _logger.LogDebug("Removing unneeded messages");
         await using var db = await _dbFactory.CreateDbContextAsync();
         var messageCount = await db.RoleMessages.CountAsync();
+        var amountToDelete = messageCount - MessagesNeeded;
+        if (amountToDelete <= 0)
+            return;
+        
         await foreach (var roleMessage in db.RoleMessages.Take(messageCount).AsAsyncEnumerable())
         {
             await channel.DeleteMessageAsync(roleMessage.MessageId);
             db.RoleMessages.Remove(roleMessage);
         }
+
         await db.SaveChangesAsync();
     }
 
@@ -104,20 +108,10 @@ public class RoleReadyListener : IDiscordListener
         for (var i = 0; i < Math.Max(0, amountToCreate); i++)
         {
             var message = await channel.SendMessageAsync("Loading...");
-            db.Add(new RoleMessage { MessageId = message.Id, Created = message.Timestamp.ToUnixTimeSeconds()});
+            db.Add(new RoleMessage { MessageId = message.Id, Created = message.Timestamp.ToUnixTimeSeconds() });
         }
-        await db.SaveChangesAsync();
-    }
 
-    /// <summary>
-    /// Changes the content of all the role messages to a loading state.
-    /// </summary>
-    private async Task ClearRoleMessageContent(IMessageChannel channel)
-    {
-        _logger.LogDebug("Clearing role message content");
-        await using var db = await _dbFactory.CreateDbContextAsync();
-        await foreach (var roleMessage in db.RoleMessages.ToAsyncEnumerable())
-            await channel.ModifyMessageAsync(roleMessage.MessageId, msg => { msg.Content = "Loading..."; });
+        await db.SaveChangesAsync();
     }
 
     /// <summary>
@@ -146,7 +140,7 @@ public class RoleReadyListener : IDiscordListener
             contentBuilder.Append("**").Append(roleName).Append("**\n");
             contentBuilder.Append(roleEntry.Description).Append("\n\n");
         }
-        
+
         // Build the buttons
         var componentBuilder = new ComponentBuilder();
         foreach (var roleEntry in _roleConfig.Access!)
@@ -162,7 +156,7 @@ public class RoleReadyListener : IDiscordListener
             msg.Components = componentBuilder.Build();
         });
     }
-    
+
     /// <summary>
     /// Updates the message which handles the colour roles. 
     /// </summary>

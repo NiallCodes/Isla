@@ -17,7 +17,7 @@ public class RoleMessage
     /// The UTC timestamp of when the message was created.
     /// </summary>
     public long Created { get; set; }
-    
+
     /// <summary>
     /// The Discord ID of the message.
     /// </summary>

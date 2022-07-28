@@ -18,7 +18,7 @@ public class RoleButtonListener : IDiscordListener
         _discord = discord;
         _roleConfig = roleConfig;
         _discord.ButtonExecuted += HandleButtonPressed;
-        
+
         // Fill the lookup
         foreach (var accessRole in roleConfig.Access!)
             _roleNameLookup[accessRole.RoleId] = $"{accessRole.Emoji} {accessRole.Title}".Trim();
