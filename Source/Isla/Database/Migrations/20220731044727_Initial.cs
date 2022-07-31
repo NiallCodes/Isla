@@ -5,7 +5,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Isla.Database.Migrations
 {
-    public partial class CreatedRoleModule : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,19 +15,13 @@ namespace Isla.Database.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Type = table.Column<int>(type: "integer", nullable: false),
+                    ChannelId = table.Column<decimal>(type: "numeric(20,0)", nullable: false),
                     MessageId = table.Column<decimal>(type: "numeric(20,0)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RoleMessages", x => x.Id);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RoleMessages_Type",
-                table: "RoleMessages",
-                column: "Type",
-                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

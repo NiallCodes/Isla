@@ -1,9 +1,9 @@
-using Isla.Database.Config;
+using Isla.Config;
 using Isla.Database.Entities;
 using Isla.Database.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using NiallVR.Launcher.Configuration.Binding.Extensions;
+using Microsoft.Extensions.Logging;
 using Npgsql;
 
 namespace Isla.Database.Installers;
@@ -15,20 +15,19 @@ public static class DatabaseInstaller
     /// </summary>
     public static void AddDatabaseModule(this IServiceCollection services)
     {
-        // Config
-        services.BindConfig<DatabaseConfig>("Database");
-
         // Services
         services.AddHostedService<DatabaseMigrationService>();
-        services.AddDbContextFactory<DatabaseContext>((s, builder) =>
+        services.AddDbContextFactory<DatabaseContext>((provider, builder) =>
         {
-            var databaseConfig = s.GetRequiredService<DatabaseConfig>();
+            var logger = provider.GetRequiredService<ILogger<DatabaseContext>>();
+            var config = provider.GetRequiredService<DatabaseConfig>();
+            logger.LogInformation("Using Postgres as the database provider");
             builder.UseNpgsql(new NpgsqlConnectionStringBuilder
             {
-                Host = databaseConfig.Host,
-                Database = databaseConfig.Database,
-                Username = databaseConfig.Username,
-                Password = databaseConfig.Password
+                Host = $"{config.Ip}:{config.Port}",
+                Database = config.Database,
+                Username = config.Username,
+                Password = config.Password
             }.ConnectionString);
         });
     }

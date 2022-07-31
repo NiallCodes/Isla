@@ -1,10 +1,10 @@
 using Isla.Bootstrap.Extensions;
-using Isla.Modules.Events.Config;
-using Isla.Modules.Events.Events;
+using Isla.Modules.Notifications.Interfaces;
+using Isla.Modules.Notifications.Listeners;
+using Isla.Modules.Notifications.Services;
 using Microsoft.Extensions.DependencyInjection;
-using NiallVR.Launcher.Configuration.Binding.Extensions;
 
-namespace Isla.Modules.Events.Installers;
+namespace Isla.Modules.Notifications.Installers;
 
 public static class EventInstaller
 {
@@ -13,12 +13,14 @@ public static class EventInstaller
     /// </summary>
     public static void AddEventModule(this IServiceCollection services)
     {
-        // Config
-        services.BindConfig<EventConfig>("Events");
-
         // Event Listeners
-        services.AddDiscordListener<EventDeletedListener>();
+        services.AddDiscordListener<EventCancelledListener>();
+        services.AddDiscordListener<EventCompletedListener>();
         services.AddDiscordListener<EventJoinedListener>();
         services.AddDiscordListener<EventLeftListener>();
+        services.AddDiscordListener<EventStartedListener>();
+
+        // Services
+        services.AddSingleton<INotificationService, NotificationService>();
     }
 }

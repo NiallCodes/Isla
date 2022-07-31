@@ -21,7 +21,7 @@ namespace Isla.Database.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Isla.Modules.Roles.Models.RoleMessage", b =>
+            modelBuilder.Entity("Isla.Modules.Roles.Data.RoleMessage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -29,8 +29,8 @@ namespace Isla.Database.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<long>("Created")
-                        .HasColumnType("bigint");
+                    b.Property<decimal>("ChannelId")
+                        .HasColumnType("numeric(20,0)");
 
                     b.Property<decimal>("MessageId")
                         .HasColumnType("numeric(20,0)");

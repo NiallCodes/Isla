@@ -1,6 +1,9 @@
+using Isla.Config;
+using Isla.Modules.Activity.Interfaces;
 using Isla.Modules.Activity.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 
 namespace Isla.Modules.Activity.Installers;
 
@@ -15,7 +18,7 @@ public static class ActivityInstaller
         services.TryAddSingleton<Random>();
 
         // Services
-        services.AddSingleton<ActivityGeneratorService>();
-        services.AddHostedService<ActivityTimerService>();
+        services.AddSingleton<IActivityGenerator, ActivityGenerator>();
+        services.AddHostedService<ActivityTimer>();
     }
 }

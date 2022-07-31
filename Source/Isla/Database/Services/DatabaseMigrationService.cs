@@ -2,12 +2,11 @@ using Isla.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NiallVR.Launcher.Hosted.Abstract;
-using Npgsql;
 
 namespace Isla.Database.Services;
 
 /// <summary>
-/// A service which triggers the database migration upon launch.
+/// A service which triggers the database migration at startup.
 /// </summary>
 public class DatabaseMigrationService : HostedServiceBase
 {
@@ -26,15 +25,16 @@ public class DatabaseMigrationService : HostedServiceBase
         {
             try
             {
-                _logger.LogInformation("Starting database migration");
+                _logger.LogInformation("Attempting to migrate the database");
                 await using var db = await _dbFactory.CreateDbContextAsync(cancellationToken);
                 await db.Database.MigrateAsync(cancellationToken);
-                _logger.LogInformation("Database migration complete");
-                break;
+                _logger.LogInformation("Database migrated successfully");
+                return;
             }
-            catch (NpgsqlException error)
+            catch (Exception error)
             {
-                _logger.LogError("Unable to perform migration ({Reason}), trying again in 10 seconds", error.Message);
+                _logger.LogError("Failed to migrate the database: {Reason}", error.Message);
+                _logger.LogInformation("Retrying migration in 10 seconds");
                 await Task.Delay(TimeSpan.FromSeconds(10), cancellationToken);
             }
         }

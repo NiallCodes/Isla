@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Isla.Database.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20220727135332_Created-Role-Module")]
-    partial class CreatedRoleModule
+    [Migration("20220731044727_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,7 +23,7 @@ namespace Isla.Database.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Isla.Modules.Roles.Models.RoleMessage", b =>
+            modelBuilder.Entity("Isla.Modules.Roles.Data.RoleMessage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -31,16 +31,13 @@ namespace Isla.Database.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<decimal>("ChannelId")
+                        .HasColumnType("numeric(20,0)");
+
                     b.Property<decimal>("MessageId")
                         .HasColumnType("numeric(20,0)");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("Type")
-                        .IsUnique();
 
                     b.ToTable("RoleMessages");
                 });

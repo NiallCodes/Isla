@@ -1,0 +1,34 @@
+Activity:
+  Enabled: true
+
+Database:
+  UsePostgres: true
+  Ip: ""
+  Port: 5432
+  Database: "Isla"
+  Username: ""
+  Password: ""
+
+Discord:
+  Token: ""
+
+Notifications:
+  Enabled: true
+  BeatSaber:
+    ChannelId: 0
+    RoleId: 0
+  Dancing:
+    ChannelId: 0
+    RoleId: 0
+  FormulaOne:
+    ChannelId: 0
+    RoleId: 0
+
+Roles:
+  Enabled: true
+  ChannelId: 0
+  Roles:
+    - RoleId: 0
+      Emoji: ""
+      Title: ""
+      Description: ""

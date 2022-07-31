@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Isla.Modules.Roles.Models;
+namespace Isla.Modules.Roles.Data;
 
 /// <summary>
 /// The persistant id of a message holding role information.
@@ -14,12 +14,12 @@ public class RoleMessage
     public int Id { get; set; }
 
     /// <summary>
-    /// The UTC timestamp of when the message was created.
+    /// The ID of the channel the message was posted in.
     /// </summary>
-    public long Created { get; set; }
+    public ulong ChannelId { get; set; }
 
     /// <summary>
-    /// The Discord ID of the message.
+    /// The ID of the message.
     /// </summary>
     public ulong MessageId { get; set; }
 }
