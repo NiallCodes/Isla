@@ -1,6 +1,5 @@
 # Isla
 
----
 🤖 A bot for my Discord server
 
 ## 💾 Usage
@@ -27,6 +26,7 @@ The Isla solution is split into the following projects:
 |----------------|-------------------|
 | Isla           | Application Code  |
 | Isla.Bootstrap | .Net Hosting code |
+
 Most of the time, code will be written inside of the main project.
 Please look at some of the existing code to get an idea of the style, I'm a big fan of folders :)
 
@@ -39,6 +39,3 @@ A module is a overarching feature or functionality of the bot.
 | Activity      | Updates the bots "playing" activity periodically.                             |
 | Notifications | Assigns/revokes "notification" roles when joining/leaving a configured event. |
 | Roles         | Role selection buttons.                                                       |
-|               |                                                                               |
-
-
