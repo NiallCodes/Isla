@@ -1,5 +1,6 @@
 Activity:
   Enabled: true
+  Frequency: 5
 
 Database:
   UsePostgres: true

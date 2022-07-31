@@ -7,4 +7,10 @@ public class ActivityConfig
     /// Default: True
     /// </summary>
     public bool Enabled { get; set; } = true;
+    
+    /// <summary>
+    /// How many minutes between activity updates.
+    /// Default: 5 Minutes
+    /// </summary>
+    public int Frequency { get; set; } = 5;
 }

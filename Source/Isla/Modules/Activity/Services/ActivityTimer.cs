@@ -9,10 +9,10 @@ namespace Isla.Modules.Activity.Services;
 public class ActivityTimer : IHostedService
 {
     private readonly ActivityConfig _config;
-    private readonly DiscordSocketClient _discordClient;
+    private readonly PeriodicTimer _periodicTimer;
     private readonly IActivityGenerator _generator;
     private readonly ILogger<ActivityTimer> _logger;
-    private readonly PeriodicTimer _periodicTimer = new(TimeSpan.FromMinutes(1));
+    private readonly DiscordSocketClient _discordClient;
 
     public ActivityTimer(ActivityConfig config, DiscordSocketClient discord, IActivityGenerator generator, ILogger<ActivityTimer> logger)
     {
@@ -20,6 +20,7 @@ public class ActivityTimer : IHostedService
         _logger = logger;
         _generator = generator;
         _discordClient = discord;
+        _periodicTimer = new PeriodicTimer(TimeSpan.FromMinutes(_config.Frequency));
     }
 
     public Task StartAsync(CancellationToken cancellationToken)
