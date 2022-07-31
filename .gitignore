@@ -3,7 +3,7 @@
 [Oo]bj/
 
 # C# - Config
-appsettings.*.Json
+appsettings.*.yaml
 
 # C# - User Files
 *.user
