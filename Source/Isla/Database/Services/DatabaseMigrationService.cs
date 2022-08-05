@@ -5,9 +5,6 @@ using NiallVR.Launcher.Hosted.Abstract;
 
 namespace Isla.Database.Services;
 
-/// <summary>
-/// A service which triggers the database migration at startup.
-/// </summary>
 public class DatabaseMigrationService : HostedServiceBase
 {
     private readonly IDbContextFactory<DatabaseContext> _dbFactory;

@@ -11,7 +11,7 @@ namespace Isla.Modules.Notifications.Installers;
 public static class NotificationsInstaller
 {
     /// <summary>
-    /// Adds the types used by the event bot module to the service collection.
+    /// Adds the types used by the event module to the service collection.
     /// </summary>
     public static void AddNotificationsModule(this IServiceCollection services)
     {

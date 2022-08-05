@@ -2,7 +2,6 @@ using Discord;
 using Discord.Rest;
 using Discord.WebSocket;
 using Isla.Bootstrap.Interfaces;
-using Isla.Config;
 using Isla.Modules.Notifications.Interfaces;
 
 namespace Isla.Modules.Notifications.Listeners;

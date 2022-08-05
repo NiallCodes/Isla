@@ -9,7 +9,6 @@ public class ActivityGenerator : IActivityGenerator
     public bool BeatSaberEvent { get; set; }
     public bool DanceEvent { get; set; }
     public bool FormulaOneEvent { get; set; }
-
     private readonly Random _random;
 
     public ActivityGenerator(Random random)

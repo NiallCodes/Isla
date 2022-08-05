@@ -7,17 +7,17 @@ public interface IActivityGenerator
     /// <summary>
     /// True if a Beat Saber event is active, otherwise false.
     /// </summary>
-    bool BeatSaberEvent { get; set; }
+    bool BeatSaberEvent { set; }
 
     /// <summary>
     /// True if a dance session is active, otherwise false.
     /// </summary>
-    bool DanceEvent { get; set; }
+    bool DanceEvent { set; }
 
     /// <summary>
     /// True if an F1 session is active, otherwise false.
     /// </summary>
-    bool FormulaOneEvent { get; set; }
+    bool FormulaOneEvent { set; }
 
     /// <summary>
     /// Generates the activity to display based on the internal state.

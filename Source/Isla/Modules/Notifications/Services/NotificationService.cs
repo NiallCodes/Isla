@@ -1,7 +1,6 @@
 using Isla.Config;
 using Isla.Modules.Activity.Interfaces;
 using Isla.Modules.Notifications.Interfaces;
-using Microsoft.Extensions.Logging;
 
 namespace Isla.Modules.Notifications.Services;
 
@@ -34,7 +33,7 @@ public class NotificationService : INotificationService
     {
         if (_activityGenerator is null)
             return;
-        
+
         if (eventChannelId == _config.BeatSaber?.ChannelId)
             _activityGenerator.BeatSaberEvent = status;
 

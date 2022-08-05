@@ -2,9 +2,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Isla.Modules.Roles.Data;
 
-/// <summary>
-/// The persistant id of a message holding role information.
-/// </summary>
 public class RoleMessage
 {
     /// <summary>
