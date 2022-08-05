@@ -9,7 +9,7 @@ public class NotificationService : INotificationService
     private readonly NotificationConfig _config;
     private readonly IActivityGenerator? _activityGenerator;
 
-    public NotificationService(NotificationConfig config, IActivityGenerator? activityGenerator)
+    public NotificationService(NotificationConfig config, IActivityGenerator? activityGenerator = null)
     {
         _config = config;
         _activityGenerator = activityGenerator;
