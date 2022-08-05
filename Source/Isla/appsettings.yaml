@@ -3,7 +3,6 @@ Activity:
   Frequency: 5
 
 Database:
-  UsePostgres: true
   Ip: ""
   Port: 5432
   Database: "Isla"
