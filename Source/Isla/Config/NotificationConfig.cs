@@ -15,12 +15,12 @@ public class NotificationConfig : ValidatedConfig
     /// The configuration for Beat Saber session events.
     /// </summary>
     public NotificationEntry? BeatSaber { get; set; }
-    
+
     /// <summary>
     /// The configuration for Dancing session events.
     /// </summary>
     public NotificationEntry? Dancing { get; set; }
-    
+
     /// <summary>
     /// The configuration for F1 session events.
     /// </summary>

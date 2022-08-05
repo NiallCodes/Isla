@@ -1,5 +1,4 @@
 using Isla.Modules.Roles.Data;
-using Isla.Modules.Roles.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Isla.Database.Entities;

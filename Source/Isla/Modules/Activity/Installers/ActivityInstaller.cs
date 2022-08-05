@@ -1,9 +1,7 @@
-using Isla.Config;
 using Isla.Modules.Activity.Interfaces;
 using Isla.Modules.Activity.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Logging;
 
 namespace Isla.Modules.Activity.Installers;
 

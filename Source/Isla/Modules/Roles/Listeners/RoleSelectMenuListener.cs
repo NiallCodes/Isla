@@ -109,7 +109,7 @@ public class RoleSelectMenuListener : IDiscordListener
         var removedRoleNames = rolesToRemove.Select(r => $"- {_roleNameLookup[r.Id]}").ToArray();
         if (addedRoleNames.Length is 0 && removedRoleNames.Length is 0)
             await arg.FollowupAsync("Looks like you're already set!");
-        
+
         // Send the response
         var stringBuilder = new StringBuilder();
         if (addedRoleNames.Length is not 0)

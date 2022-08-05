@@ -29,9 +29,12 @@ public class ActivityTimer : IHostedService
         {
             _logger.LogInformation("Enabling the Activity module");
             _ = StartTimerLoopAsync();
-        } else {
+        }
+        else
+        {
             _logger.LogInformation("Disabling the Activity module");
         }
+
         return Task.CompletedTask;
     }
 
@@ -39,7 +42,7 @@ public class ActivityTimer : IHostedService
     {
         if (_config.Enabled)
             _logger.LogInformation("Disabling the Activity module");
-        
+
         _periodicTimer.Dispose();
         return Task.CompletedTask;
     }

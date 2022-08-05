@@ -21,7 +21,7 @@ public class RoleEntry
     /// A short description about the role.
     /// </summary>
     public string? Description { get; set; }
-    
+
     /// <summary>
     /// The UI friendly name of the role.
     /// </summary>

@@ -63,7 +63,7 @@ public class RoleReadyListener : IDiscordListener
         var roleMessage = await db.RoleMessages.OrderBy(r => r.Id).FirstOrDefaultAsync();
         if (roleMessage is null)
             return;
-        
+
         // Ensure the channel still exists
         var guild = _discord.Guilds.First();
         var channel = guild.GetTextChannel(roleMessage.ChannelId);
@@ -73,7 +73,7 @@ public class RoleReadyListener : IDiscordListener
             await db.SaveChangesAsync();
             return;
         }
-        
+
         // Ensure the message still exists
         var message = await channel.GetMessageAsync(roleMessage.MessageId);
         if (message is null)
@@ -102,12 +102,12 @@ public class RoleReadyListener : IDiscordListener
         var messageCount = await db.RoleMessages.CountAsync();
         if (messageCount is not 0)
             return;
-        
+
         // Send a new message.
         var guild = _discord.Guilds.First();
         var channel = guild.GetTextChannel(_config.ChannelId);
         var message = await channel.SendMessageAsync("Loading...");
-        
+
         // Store the message in the DB.
         db.RoleMessages.Add(new RoleMessage { ChannelId = channel.Id, MessageId = message.Id });
         await db.SaveChangesAsync();
