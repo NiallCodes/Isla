@@ -11,11 +11,10 @@ public class EventJoinedListener : IDiscordListener
 {
     private readonly INotificationService _notificationService;
 
-    public EventJoinedListener(NotificationConfig config, DiscordSocketClient discord, INotificationService notificationService)
+    public EventJoinedListener(DiscordSocketClient discord, INotificationService notificationService)
     {
         _notificationService = notificationService;
-        if (config.Enabled)
-            discord.GuildScheduledEventUserAdd += HandleUserJoinedEvent;
+        discord.GuildScheduledEventUserAdd += HandleUserJoinedEvent;
     }
 
     /// <summary>

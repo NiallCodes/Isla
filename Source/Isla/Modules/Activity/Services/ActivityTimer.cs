@@ -8,7 +8,6 @@ namespace Isla.Modules.Activity.Services;
 
 public class ActivityTimer : IHostedService
 {
-    private readonly ActivityConfig _config;
     private readonly PeriodicTimer _periodicTimer;
     private readonly IActivityGenerator _generator;
     private readonly ILogger<ActivityTimer> _logger;
@@ -16,33 +15,22 @@ public class ActivityTimer : IHostedService
 
     public ActivityTimer(ActivityConfig config, DiscordSocketClient discord, IActivityGenerator generator, ILogger<ActivityTimer> logger)
     {
-        _config = config;
         _logger = logger;
         _generator = generator;
         _discordClient = discord;
-        _periodicTimer = new PeriodicTimer(TimeSpan.FromMinutes(_config.Frequency));
+        _periodicTimer = new PeriodicTimer(TimeSpan.FromMinutes(config.Frequency));
     }
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        if (_config.Enabled)
-        {
-            _logger.LogInformation("Enabling the Activity module");
-            _ = StartTimerLoopAsync();
-        }
-        else
-        {
-            _logger.LogInformation("Disabling the Activity module");
-        }
-
+        _logger.LogInformation("Starting the activity timer");
+        _ = StartTimerLoopAsync();
         return Task.CompletedTask;
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
-        if (_config.Enabled)
-            _logger.LogInformation("Disabling the Activity module");
-
+        _logger.LogInformation("Stopping the activity timer");
         _periodicTimer.Dispose();
         return Task.CompletedTask;
     }

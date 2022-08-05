@@ -23,16 +23,7 @@ public class RoleReadyListener : IDiscordListener
         _discord = discord;
         _dbFactory = dbFactory;
         _config = config;
-
-        if (_config.Enabled)
-        {
-            logger.LogInformation("Starting Role module");
-            _discord.Ready += HandleReady;
-        }
-        else
-        {
-            logger.LogInformation("Disabling the Role module");
-        }
+        _discord.Ready += HandleReady;
     }
 
     private Task HandleReady()

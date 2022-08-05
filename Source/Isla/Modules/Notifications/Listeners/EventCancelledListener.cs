@@ -9,11 +9,10 @@ public class EventCancelledListener : IDiscordListener
 {
     private readonly INotificationService _notificationService;
 
-    public EventCancelledListener(NotificationConfig config, DiscordSocketClient discord, INotificationService notificationService)
+    public EventCancelledListener(DiscordSocketClient discord, INotificationService notificationService)
     {
         _notificationService = notificationService;
-        if (config.Enabled)
-            discord.GuildScheduledEventCancelled += HandleEventCancelled;
+        discord.GuildScheduledEventCancelled += HandleEventCancelled;
     }
 
     /// <summary>

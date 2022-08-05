@@ -9,11 +9,10 @@ public class EventCompletedListener : IDiscordListener
 {
     private readonly INotificationService _notificationService;
 
-    public EventCompletedListener(NotificationConfig config, DiscordSocketClient discord, INotificationService notificationService)
+    public EventCompletedListener(DiscordSocketClient discord, INotificationService notificationService)
     {
         _notificationService = notificationService;
-        if (config.Enabled)
-            discord.GuildScheduledEventCompleted += HandleEventCompleted;
+        discord.GuildScheduledEventCompleted += HandleEventCompleted;
     }
 
     /// <summary>

@@ -8,17 +8,12 @@ namespace Isla.Modules.Notifications.Services;
 public class NotificationService : INotificationService
 {
     private readonly NotificationConfig _config;
-    private readonly IActivityGenerator _activityGenerator;
+    private readonly IActivityGenerator? _activityGenerator;
 
-    public NotificationService(NotificationConfig config, IActivityGenerator activityGenerator, ILogger<NotificationService> logger)
+    public NotificationService(NotificationConfig config, IActivityGenerator? activityGenerator)
     {
         _config = config;
         _activityGenerator = activityGenerator;
-
-        if (_config.Enabled)
-            logger.LogInformation("Starting Notification module");
-        else
-            logger.LogInformation("Disabling the Notification module");
     }
 
     public ulong? GetRoleId(ulong eventChannelId)
@@ -37,6 +32,9 @@ public class NotificationService : INotificationService
 
     public void SetActivityStatus(ulong eventChannelId, bool status)
     {
+        if (_activityGenerator is null)
+            return;
+        
         if (eventChannelId == _config.BeatSaber?.ChannelId)
             _activityGenerator.BeatSaberEvent = status;
 

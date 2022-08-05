@@ -11,11 +11,10 @@ public class EventLeftListener : IDiscordListener
 {
     private readonly INotificationService _notificationService;
 
-    public EventLeftListener(NotificationConfig config, DiscordSocketClient discord, INotificationService notificationService)
+    public EventLeftListener(DiscordSocketClient discord, INotificationService notificationService)
     {
         _notificationService = notificationService;
-        if (config.Enabled)
-            discord.GuildScheduledEventUserRemove += HandleUserLeftEvent;
+        discord.GuildScheduledEventUserRemove += HandleUserLeftEvent;
     }
 
     /// <summary>

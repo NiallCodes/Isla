@@ -9,11 +9,10 @@ public class EventStartedListener : IDiscordListener
 {
     private readonly INotificationService _notificationService;
 
-    public EventStartedListener(NotificationConfig config, DiscordSocketClient discord, INotificationService notificationService)
+    public EventStartedListener(DiscordSocketClient discord, INotificationService notificationService)
     {
         _notificationService = notificationService;
-        if (config.Enabled)
-            discord.GuildScheduledEventStarted += HandleEventStarted;
+        discord.GuildScheduledEventStarted += HandleEventStarted;
     }
 
     /// <summary>

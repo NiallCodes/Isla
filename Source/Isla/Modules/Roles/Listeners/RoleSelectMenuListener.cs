@@ -20,12 +20,9 @@ public class RoleSelectMenuListener : IDiscordListener
         _logger = logger;
         _discord = discord;
         _roleNameLookup = config.Roles.ToDictionary(r => r.RoleId, r => r.FriendlyName);
-        if (_config.Enabled)
-        {
-            _discord.Ready += HandleDiscordReady;
-            _discord.RoleDeleted += HandleRoleDeleted;
-            _discord.SelectMenuExecuted += HandleMenuExecuted;
-        }
+        _discord.Ready += HandleDiscordReady;
+        _discord.RoleDeleted += HandleRoleDeleted;
+        _discord.SelectMenuExecuted += HandleMenuExecuted;
     }
 
     /// <summary>

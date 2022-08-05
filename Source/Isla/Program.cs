@@ -35,7 +35,7 @@ await Host.CreateDefaultBuilder()
 
         // Bot Modules
         services.AddActivityModule();
-        services.AddEventModule();
+        services.AddNotificationsModule();
         services.AddRoleModule();
 
         // Discord Client Configuration
