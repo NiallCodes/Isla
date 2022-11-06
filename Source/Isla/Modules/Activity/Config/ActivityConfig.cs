@@ -1,4 +1,4 @@
-namespace Isla.Config;
+namespace Isla.Modules.Activity.Config;
 
 public class ActivityConfig
 {

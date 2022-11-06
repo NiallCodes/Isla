@@ -1,11 +1,11 @@
 using Isla.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using NiallVR.Launcher.Hosted.Abstract;
+using NiallCodes.Launchpad.Hosting.Utilities.Services;
 
 namespace Isla.Database.Services;
 
-public class DatabaseMigrationService : HostedServiceBase
+public class DatabaseMigrationService : HostedService
 {
     private readonly IDbContextFactory<DatabaseContext> _dbFactory;
     private readonly ILogger<DatabaseMigrationService> _logger;

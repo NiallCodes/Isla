@@ -1,18 +1,18 @@
 using Discord;
 using Discord.Interactions;
 using Microsoft.Extensions.Logging;
-using NiallVR.Launcher.Hosted.Abstract;
+using NiallCodes.Launchpad.Hosting.Utilities.Services;
 
-namespace Isla.Bootstrap.Services;
+namespace Isla.Bot.Services;
 
 /// <summary>
 /// A bridge between the Discord.Net and Microsoft loggers.
 /// </summary>
-public class InteractionLogger : HostedServiceBase
+public class InteractionLoggerService : HostedService
 {
     private readonly ILogger<InteractionService> _logger;
 
-    public InteractionLogger(InteractionService interaction, ILoggerFactory loggerFactory)
+    public InteractionLoggerService(InteractionService interaction, ILoggerFactory loggerFactory)
     {
         _logger = loggerFactory.CreateLogger<InteractionService>();
         interaction.Log += OnInteractionLog;

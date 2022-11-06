@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
-using NiallVR.Launcher.Configuration.Validation.Abstract;
+using NiallCodes.Launchpad.Configuration.Validation.Models;
 
-namespace Isla.Config;
+namespace Isla.Bot.Config;
 
-public class DiscordConfig : ValidatedConfig
+public class BotConfig : ValidatedConfig
 {
     /// <summary>
     /// The token used to authenticate as the bot user.

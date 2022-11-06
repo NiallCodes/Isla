@@ -1,9 +1,9 @@
 using System.Text;
 using Discord;
 using Discord.WebSocket;
-using Isla.Bootstrap.Interfaces;
-using Isla.Config;
+using Isla.Bot.Interfaces;
 using Isla.Database.Entities;
+using Isla.Modules.Roles.Config;
 using Isla.Modules.Roles.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

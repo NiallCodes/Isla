@@ -1,7 +1,7 @@
 using Discord.Interactions;
 using Discord.WebSocket;
 
-namespace Isla.Bootstrap.Models;
+namespace Isla.Bot.Models;
 
 /// <summary>
 /// Configuration for the Discord client and related services.

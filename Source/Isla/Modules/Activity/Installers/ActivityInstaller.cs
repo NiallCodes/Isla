@@ -1,4 +1,4 @@
-using Isla.Config;
+using Isla.Modules.Activity.Config;
 using Isla.Modules.Activity.Interfaces;
 using Isla.Modules.Activity.Services;
 using Isla.Modules.Global.Extensions;

@@ -1,4 +1,4 @@
-namespace Isla.Bootstrap.Interfaces;
+namespace Isla.Bot.Interfaces;
 
 /// <summary>
 /// An empty interface which gets created before the Discord bot starts.

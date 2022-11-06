@@ -2,18 +2,18 @@ using System.Net.WebSockets;
 using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.Logging;
-using NiallVR.Launcher.Hosted.Abstract;
+using NiallCodes.Launchpad.Hosting.Utilities.Services;
 
-namespace Isla.Bootstrap.Services;
+namespace Isla.Bot.Services;
 
 /// <summary>
-/// A bridge between the Discord.Net and Microsoft loggers.
+/// A bridge between the Discord.Net and Microsoft's logger.
 /// </summary>
-internal class DiscordLogger : HostedServiceBase
+internal class DiscordLoggerService : HostedService
 {
     private readonly ILogger<DiscordSocketClient> _logger;
 
-    public DiscordLogger(DiscordSocketClient discord, ILoggerFactory loggerFactory)
+    public DiscordLoggerService(DiscordSocketClient discord, ILoggerFactory loggerFactory)
     {
         _logger = loggerFactory.CreateLogger<DiscordSocketClient>();
         discord.Log += OnDiscordLog;
@@ -43,7 +43,7 @@ internal class DiscordLogger : HostedServiceBase
             // WebSocketExceptions are handled, but also logged, by Discord.Net.
             // We don't really care about them, as it's not our problem.
             case WebSocketException:
-            case Exception { InnerException: WebSocketException }:
+            case { InnerException: WebSocketException }:
                 return Task.CompletedTask;
 
             default:

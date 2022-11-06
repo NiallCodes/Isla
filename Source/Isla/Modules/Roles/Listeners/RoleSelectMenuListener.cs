@@ -1,7 +1,7 @@
 using System.Text;
 using Discord.WebSocket;
-using Isla.Bootstrap.Interfaces;
-using Isla.Config;
+using Isla.Bot.Interfaces;
+using Isla.Modules.Roles.Config;
 using Microsoft.Extensions.Logging;
 
 namespace Isla.Modules.Roles.Listeners;

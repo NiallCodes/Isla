@@ -1,17 +1,16 @@
 ﻿using Discord;
-using Isla.Bootstrap.Extensions;
-using Isla.Config;
+using Isla.Bot.Config;
+using Isla.Bot.Extensions;
 using Isla.Database.Installers;
 using Isla.Modules.Activity.Installers;
 using Isla.Modules.Notifications.Installers;
 using Isla.Modules.Roles.Installers;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NiallVR.Launcher.Configuration.Setup.Extensions;
-using NiallVR.Launcher.Configuration.Validation.Extensions;
-using NiallVR.Launcher.Logging.Extensions;
+using NiallCodes.Launchpad.Configuration.Validation.Extensions;
+using NiallCodes.Launchpad.Serilog.Setup.Extensions;
 using Serilog;
-using DiscordConfig = Isla.Config.DiscordConfig;
 
 await Host.CreateDefaultBuilder()
     .UseSerilog((_, services, config) =>
@@ -19,17 +18,17 @@ await Host.CreateDefaultBuilder()
         config.UseConsoleSink();
         config.UseConfiguration(services);
     })
-    .UseYamlConfig()
-    .UseConfigValidation(services =>
+    .ConfigureAppConfiguration((context, builder) =>
     {
-        services.BindConfig<ActivityConfig>("Activity");
-        services.BindConfig<DatabaseConfig>("Database");
-        services.BindConfig<DiscordConfig>("Discord");
-        services.BindConfig<NotificationConfig>("Notifications");
-        services.BindConfig<RoleConfig>("Roles");
+        builder.AddYamlFile("config.yaml", optional: true);
+        builder.AddYamlFile($"config.{context.HostingEnvironment.EnvironmentName}.yaml", optional: true);
     })
+    .UseConfigValidation()
     .ConfigureServices(services =>
     {
+        // Database
+
+
         // App Modules
         services.AddDatabaseModule();
 
@@ -41,7 +40,7 @@ await Host.CreateDefaultBuilder()
         // Discord Client Configuration
         services.AddDiscord((s, settings) =>
         {
-            settings.Token = s.GetRequiredService<DiscordConfig>().Token!;
+            settings.Token = s.GetRequiredService<BotConfig>().Token!;
             settings.DiscordConfig.AlwaysDownloadUsers = true;
             settings.DiscordConfig.GatewayIntents =
                 GatewayIntents.Guilds |

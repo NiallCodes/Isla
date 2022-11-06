@@ -3,26 +3,26 @@ using Discord.Interactions;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NiallVR.Launcher.Hosted.Abstract;
+using NiallCodes.Launchpad.Hosting.Utilities.Services;
 
-namespace Isla.Bootstrap.Services;
+namespace Isla.Bot.Services;
 
 /// <summary>
 /// Handles incoming interaction events.
 /// </summary>
-public class InteractionHandler : HostedServiceBase
+public class InteractionHandlerService : HostedService
 {
     private readonly IServiceProvider _services;
     private readonly DiscordSocketClient _discord;
     private readonly InteractionService _interaction;
-    private readonly ILogger<InteractionHandler> _logger;
+    private readonly ILogger<InteractionHandlerService> _logger;
 
-    public InteractionHandler(IServiceProvider services)
+    public InteractionHandlerService(IServiceProvider services)
     {
         _services = services;
         _discord = services.GetRequiredService<DiscordSocketClient>();
         _interaction = services.GetRequiredService<InteractionService>();
-        _logger = services.GetRequiredService<ILogger<InteractionHandler>>();
+        _logger = services.GetRequiredService<ILogger<InteractionHandlerService>>();
 
         _discord.SlashCommandExecuted += HandleInteractionRequest;
         _discord.UserCommandExecuted += HandleInteractionRequest;

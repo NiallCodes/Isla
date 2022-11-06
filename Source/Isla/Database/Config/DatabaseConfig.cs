@@ -1,6 +1,6 @@
-using NiallVR.Launcher.Configuration.Validation.Abstract;
+using NiallCodes.Launchpad.Configuration.Validation.Models;
 
-namespace Isla.Config;
+namespace Isla.Database.Config;
 
 public class DatabaseConfig : ValidatedConfig
 {

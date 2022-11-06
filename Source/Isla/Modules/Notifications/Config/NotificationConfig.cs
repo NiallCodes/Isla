@@ -1,7 +1,7 @@
 using Isla.Modules.Notifications.Models;
-using NiallVR.Launcher.Configuration.Validation.Abstract;
+using NiallCodes.Launchpad.Configuration.Validation.Models;
 
-namespace Isla.Config;
+namespace Isla.Modules.Notifications.Config;
 
 public class NotificationConfig : ValidatedConfig
 {

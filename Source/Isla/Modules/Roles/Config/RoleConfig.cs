@@ -1,6 +1,6 @@
 using Isla.Modules.Roles.Models;
 
-namespace Isla.Config;
+namespace Isla.Modules.Roles.Config;
 
 public class RoleConfig
 {

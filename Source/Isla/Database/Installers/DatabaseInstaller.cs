@@ -1,4 +1,4 @@
-using Isla.Config;
+using Isla.Database.Config;
 using Isla.Database.Entities;
 using Isla.Database.Services;
 using Microsoft.EntityFrameworkCore;

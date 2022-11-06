@@ -1,6 +1,6 @@
-using Isla.Bootstrap.Extensions;
-using Isla.Config;
+using Isla.Bot.Extensions;
 using Isla.Modules.Global.Extensions;
+using Isla.Modules.Roles.Config;
 using Isla.Modules.Roles.Listeners;
 using Microsoft.Extensions.DependencyInjection;
 

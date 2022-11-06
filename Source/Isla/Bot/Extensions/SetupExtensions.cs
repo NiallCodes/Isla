@@ -1,12 +1,12 @@
 using Discord.Interactions;
 using Discord.WebSocket;
-using Isla.Bootstrap.Interfaces;
-using Isla.Bootstrap.Models;
-using Isla.Bootstrap.Services;
+using Isla.Bot.Interfaces;
+using Isla.Bot.Models;
+using Isla.Bot.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Isla.Bootstrap.Extensions;
+namespace Isla.Bot.Extensions;
 
 public static class SetupExtensions
 {
@@ -26,8 +26,8 @@ public static class SetupExtensions
         });
 
         // Discord Client Services
-        services.AddHostedService<DiscordLogger>();
-        services.AddHostedService<DiscordLauncher>();
+        services.AddHostedService<DiscordLoggerService>();
+        services.AddHostedService<DiscordClientService>();
         services.AddSingleton(s =>
         {
             var discordConfig = s.GetRequiredService<DiscordSettings>().DiscordConfig;
@@ -35,9 +35,9 @@ public static class SetupExtensions
         });
 
         // Interaction Services
-        services.AddHostedService<InteractionHandler>();
-        services.AddHostedService<InteractionLoader>();
-        services.AddHostedService<InteractionLogger>();
+        services.AddHostedService<InteractionHandlerService>();
+        services.AddHostedService<InteractionLoaderService>();
+        services.AddHostedService<InteractionLoggerService>();
         services.AddSingleton(s =>
         {
             var discord = s.GetRequiredService<DiscordSocketClient>();

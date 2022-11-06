@@ -1,5 +1,5 @@
 using Discord.WebSocket;
-using Isla.Bootstrap.Interfaces;
+using Isla.Bot.Interfaces;
 using Isla.Modules.Notifications.Interfaces;
 
 namespace Isla.Modules.Notifications.Listeners;

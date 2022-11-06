@@ -1,15 +1,15 @@
 using Discord.Interactions;
 using Discord.WebSocket;
-using Isla.Bootstrap.Models;
+using Isla.Bot.Models;
 using Microsoft.Extensions.DependencyInjection;
-using NiallVR.Launcher.Hosted.Abstract;
+using NiallCodes.Launchpad.Hosting.Utilities.Services;
 
-namespace Isla.Bootstrap.Services;
+namespace Isla.Bot.Services;
 
 /// <summary>
 /// A service which loads the interaction modules into the interaction service.
 /// </summary>
-public class InteractionLoader : HostedServiceBase
+public class InteractionLoaderService : HostedService
 {
     private readonly DiscordSettings _settings;
     private readonly IServiceProvider _services;
@@ -18,7 +18,7 @@ public class InteractionLoader : HostedServiceBase
     private readonly List<ModuleInfo> _guildModules = new();
     private readonly List<ModuleInfo> _globalModules = new();
 
-    public InteractionLoader(IServiceProvider services)
+    public InteractionLoaderService(IServiceProvider services)
     {
         _services = services;
         _settings = services.GetRequiredService<DiscordSettings>();

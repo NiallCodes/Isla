@@ -1,5 +1,5 @@
-using Isla.Config;
 using Isla.Modules.Activity.Interfaces;
+using Isla.Modules.Notifications.Config;
 using Isla.Modules.Notifications.Interfaces;
 
 namespace Isla.Modules.Notifications.Services;

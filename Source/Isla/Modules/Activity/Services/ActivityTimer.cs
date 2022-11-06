@@ -1,5 +1,5 @@
 using Discord.WebSocket;
-using Isla.Config;
+using Isla.Modules.Activity.Config;
 using Isla.Modules.Activity.Interfaces;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;

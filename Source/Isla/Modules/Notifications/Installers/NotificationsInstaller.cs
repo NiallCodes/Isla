@@ -1,6 +1,6 @@
-using Isla.Bootstrap.Extensions;
-using Isla.Config;
+using Isla.Bot.Extensions;
 using Isla.Modules.Global.Extensions;
+using Isla.Modules.Notifications.Config;
 using Isla.Modules.Notifications.Interfaces;
 using Isla.Modules.Notifications.Listeners;
 using Isla.Modules.Notifications.Services;
